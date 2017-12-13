@@ -24,6 +24,34 @@ def read_file():
 
     return tree
 
+def parse_xml(tree):
+    '''
+    Parse xml document and
+    Output list of paragraphs
+    '''
+
+    WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+    PARA = WORD_NAMESPACE + 'p'
+    TEXT = WORD_NAMESPACE + 't'
+
+    paragraphs= []
+    for paragraph in tree.getiterator(PARA):
+        texts = [node.text
+                for node in paragraph.getiterator(TEXT)
+                if node.text]
+        joined = ''.join(texts)
+
+        if texts:
+            paragraphs[-1].append(''.join(texts))
+        else:
+            paragraphs.append([])
+
+
+    return paragraphs
+
 if __name__ == '__main__':
     tree = read_file()
-    print(type(tree), tree)
+    paragraphs = parse_xml(tree)
+
+    for i in range(0,len(paragraphs)):
+        print('{}.  {}'.format(i, paragraphs[i]))
