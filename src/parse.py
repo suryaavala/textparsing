@@ -4,6 +4,8 @@ import sys
 from xml.etree.ElementTree import XML
 import zipfile
 
+import json
+
 def read_file():
     '''
     Read the doc file
@@ -69,6 +71,26 @@ def parse_xml(tree):
 
     return paragraphs
 
+def to_json(paragraphs):
+    '''
+
+    '''
+    title = paragraphs[0][0]
+
+    contents = []
+    doc = {}
+    for p in paragraphs[1:]:
+        sub = {}
+        sub[p[0]] = p[1:]
+        contents.append(sub)
+
+    doc[title] = contents
+    #
+    j_str = json.dumps(doc, sort_keys=True, indent=4)
+
+    return j_str
+
+
 if __name__ == '__main__':
     tree = read_file()
     paragraphs = parse_xml(tree)
@@ -77,4 +99,4 @@ if __name__ == '__main__':
     #     print('{}.  {}'.format(i, paragraphs[i]))
     # import numpy as np
     # print(np.matrix(paragraphs))
-    print(paragraphs)
+    print(to_json(paragraphs))
