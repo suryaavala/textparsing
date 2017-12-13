@@ -90,8 +90,17 @@ def to_json(paragraphs):
 
     return j_str
 
+def json_html(json_data):
+    doc = json.loads(json_data)
+    html = json2html.convert(json = doc)
+    file_name = '/'.join(sys.path[1].split('/')[:-1]) + '/index.html'
+    with open(file_name, 'w') as f:
+        f.write(html)
+    f.close()
+    print('index.html updated')
 
 if __name__ == '__main__':
+    from json2html import *
     tree = read_file()
     paragraphs = parse_xml(tree)
 
@@ -99,4 +108,4 @@ if __name__ == '__main__':
     #     print('{}.  {}'.format(i, paragraphs[i]))
     # import numpy as np
     # print(np.matrix(paragraphs))
-    print(to_json(paragraphs))
+    json_html(to_json(paragraphs))
